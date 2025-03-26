@@ -1,36 +1,17 @@
 package utils
 
 import (
-	"encoding/csv"
-	"fmt"
-	"os"
 	"strconv"
 )
 
-func listRecords(f *os.File) ([][]string, error) {
-	// Reset file pointer to beginning
-	f.Seek(0, 0)
-	
-	reader := csv.NewReader(f)
-	records, err := reader.ReadAll()
-
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return nil, err
-	}
-
-	return records, nil
-}
-	
-
 func getLastID(records [][]string) (uint64, error) {
-	if len(records) <= 2 { 
+	if len(records) < 1 { 
 		return 0, nil
 	}
 
 	var maxID uint64 = 0
 
-	for _, record := range records[1:] {
+	for _, record := range records {
 		if record[0] != "" {
 			id, err := strconv.ParseUint(record[0], 10, 8)
 			if err != nil {
@@ -45,3 +26,11 @@ func getLastID(records [][]string) (uint64, error) {
 	return maxID, nil
 }
 	
+func filter[T any](ss []T, test func(T) bool)(ret []T){
+	for _, s := range ss {
+		if test(s){
+			ret = append(ret, s)
+		}
+	}
+	return
+}

@@ -10,16 +10,29 @@ import (
 	"github.com/mergestat/timediff"
 )
 
-func ListTasks(f *os.File, verbose bool) {
-	records, err := listRecords(f)
+func ListTasks(data [][]string, verbose bool) {
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', tabwriter.TabIndent)
+	defer w.Flush()
 
-	if err != nil {
-		fmt.Println("Error reading file:", err)
+	if len(data) < 2 {
+		fmt.Println("No tasks")
 		return
 	}
 
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', tabwriter.TabIndent)
-	defer w.Flush()
+	to_show_records := filter(
+		data[1:], 
+		func(record []string) bool {
+			if verbose {
+				return true
+			}
+			return record[3] == "false"
+		},
+	)
+
+	if len(to_show_records) == 0 {
+		fmt.Println("No tasks")
+		return
+	}
 
 	if verbose {
 		fmt.Fprintln(w, "\nID\tTASK\tCREATED AT\tCOMPLETED")
@@ -29,7 +42,7 @@ func ListTasks(f *os.File, verbose bool) {
 		fmt.Fprintln(w, "---\t----\t----------")
 	}
 	
-	for i, record := range records[1:] {
+	for i, record := range to_show_records {
 		if len(record) >= 4 {
 			id, err := strconv.ParseUint(record[0], 10, 8)
 			if err != nil {
