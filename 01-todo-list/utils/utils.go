@@ -5,7 +5,7 @@ import (
 )
 
 func getLastID(records [][]string) (uint64, error) {
-	if len(records) < 1 { 
+	if len(records) < 1 {
 		return 0, nil
 	}
 
@@ -22,15 +22,16 @@ func getLastID(records [][]string) (uint64, error) {
 			}
 		}
 	}
-	
+
 	return maxID, nil
 }
-	
-func filter[T any](ss []T, test func(T) bool)(ret []T){
+
+func filter[T any](ss []T, test func(T) bool) (ret []T) {
 	for _, s := range ss {
-		if test(s){
+		if test(s) {
 			ret = append(ret, s)
 		}
 	}
 	return
 }
+

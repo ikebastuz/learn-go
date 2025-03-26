@@ -18,9 +18,8 @@ func CompleteTask(data [][]string, taskID string) {
 		}
 	}
 
-	db.WriteData(data)
-
 	if found {
+		db.WriteData(data)
 		fmt.Println("Task completed successfully")
 	} else {
 		fmt.Printf("Task with ID: %v was not found\n", taskID)

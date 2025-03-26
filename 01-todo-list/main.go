@@ -31,6 +31,13 @@ func main() {
 				}
 				utils.CompleteTask(data, args[1])
 				return
+			case "delete": {}
+				if len(args) < 2 {
+					fmt.Println("Please provide a task ID to delete")
+					return
+				}
+				utils.DeleteTask(data, args[1])
+				return
 			default:
 				fmt.Println("Invalid command")
 		}
