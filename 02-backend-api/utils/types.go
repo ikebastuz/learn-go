@@ -1,6 +1,6 @@
 package utils
 
-type RequestData struct {
+type RequestData2Nums struct {
 	Number1 *float64 `json:"number1"`
 	Number2 *float64 `json:"number2"`
 }

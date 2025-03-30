@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func DoAdd(w http.ResponseWriter, r *http.Request) {
+func DoSubtract(w http.ResponseWriter, r *http.Request) {
 	if errRequest := validateRequest(r); errRequest != nil {
 		writeJSON(w, http.StatusBadRequest, errRequest)
 		return
@@ -17,7 +17,6 @@ func DoAdd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := num1 + num2
-
+	result := num1 - num2
 	writeJSON(w, http.StatusOK, ResponseData{Result: result})
 }
