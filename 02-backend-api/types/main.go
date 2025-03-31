@@ -1,4 +1,4 @@
-package utils
+package types
 
 type RequestData2Nums struct {
 	Number1 *float64 `json:"number1"`

@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"calculator/calculator"
+	"log/slog"
 	"net/http"
 )
 
@@ -17,6 +19,8 @@ func DoSubtract(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := num1 - num2
-	writeJSON(w, http.StatusOK, &ResponseData{Result: result})
+	slog.Info("Subtracting", "number1", num1, "number2", num2)
+	result := calculator.Subtract(num1, num2)
+
+	writeJSON(w, http.StatusOK, result)
 }

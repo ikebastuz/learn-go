@@ -2,18 +2,40 @@ package main
 
 import (
 	"calculator/utils"
+	"context"
 	"log/slog"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/gorilla/mux"
+	"time"
 )
 
 func main() {
-	http.HandleFunc("/add", utils.DoAdd)
-	http.HandleFunc("/subtract", utils.DoSubtract)
-	http.HandleFunc("/multiply", utils.DoMultiply)
-	http.HandleFunc("/divide", utils.DoDivide)
-	http.HandleFunc("/sum", utils.DoSum)
+	r := mux.NewRouter()
+	r.HandleFunc("/add", utils.DoAdd).Methods(http.MethodPost)
+	r.HandleFunc("/subtract", utils.DoSubtract).Methods(http.MethodPost)
+	r.HandleFunc("/multiply", utils.DoMultiply).Methods(http.MethodPost)
+	r.HandleFunc("/divide", utils.DoDivide).Methods(http.MethodPost)
+	r.HandleFunc("/sum", utils.DoSum).Methods(http.MethodPost)
 
 	port := ":1337"
 	slog.Info("Server is running on http://localhost" + port)
-	http.ListenAndServe(port, nil)
+
+	go func() {
+		if err := http.ListenAndServe(port, r); err != nil {
+			slog.Error("Server Error", "Err:", err)
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	slog.Info("Shutting down server")
+	_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 }

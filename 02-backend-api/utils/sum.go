@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"calculator/calculator"
 	"log/slog"
 	"net/http"
 )
@@ -18,12 +19,8 @@ func DoSum(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	slog.Info("Adding", "items", items)
+	slog.Info("Summing", "numbers", items)
+	result := calculator.Sum(items)
 
-	var result float64 = 0
-	for _, num := range items {
-		result += num
-	}
-
-	writeJSON(w, http.StatusOK, &ResponseData{Result: result})
+	writeJSON(w, http.StatusOK, result)
 }

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"calculator/calculator"
 	"log/slog"
 	"net/http"
 )
@@ -19,8 +20,7 @@ func DoAdd(w http.ResponseWriter, r *http.Request) {
 	}
 
 	slog.Info("Adding", "number1", num1, "number2", num2)
+	result := calculator.Add(num1, num2)
 
-	result := num1 + num2
-
-	writeJSON(w, http.StatusOK, &ResponseData{Result: result})
+	writeJSON(w, http.StatusOK, result)
 }

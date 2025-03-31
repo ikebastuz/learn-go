@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"calculator/calculator"
+	"log/slog"
 	"net/http"
 )
 
@@ -17,14 +19,8 @@ func DoDivide(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if num2 == 0 {
-		writeJSON(w, http.StatusBadRequest, &ResponseData{
-			Error: "Can not divide by 0",
-		})
+	slog.Info("Dividing", "number1", num1, "number2", num2)
+	result := calculator.Divide(num1, num2)
 
-		return
-	}
-
-	result := num1 / num2
-	writeJSON(w, http.StatusOK, &ResponseData{Result: result})
+	writeJSON(w, http.StatusOK, result)
 }
