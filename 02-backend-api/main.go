@@ -10,11 +10,26 @@ import (
 	"syscall"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/time/rate"
 	"time"
 )
 
+var limiter = rate.NewLimiter(1, 5)
+
+func rateLimitMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !limiter.Allow() {
+			http.Error(w, "Too many requests", http.StatusTooManyRequests)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	r := mux.NewRouter()
+	r.Use(rateLimitMiddleware)
+
 	r.HandleFunc("/add", utils.DoAdd).Methods(http.MethodPost)
 	r.HandleFunc("/subtract", utils.DoSubtract).Methods(http.MethodPost)
 	r.HandleFunc("/multiply", utils.DoMultiply).Methods(http.MethodPost)
