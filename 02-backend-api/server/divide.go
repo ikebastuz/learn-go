@@ -1,4 +1,4 @@
-package utils
+package server
 
 import (
 	"calculator/calculator"
@@ -6,21 +6,21 @@ import (
 	"net/http"
 )
 
-func DoSum(w http.ResponseWriter, r *http.Request) {
+func DoDivide(w http.ResponseWriter, r *http.Request) {
 	if errRequest := validateRequest(r); errRequest != nil {
 		writeJSON(w, http.StatusBadRequest, errRequest)
 		return
 	}
 
-	var items, errPayload = validateRequestNumsSlice(r)
+	var num1, num2, errPayload = validateRequest2Nums(r)
 
 	if errPayload != nil {
 		writeJSON(w, http.StatusBadRequest, errPayload)
 		return
 	}
 
-	slog.Info("Summing", "numbers", items)
-	result := calculator.Sum(items)
+	slog.Info("Dividing", "number1", num1, "number2", num2)
+	result := calculator.Divide(num1, num2)
 
 	writeJSON(w, http.StatusOK, result)
 }

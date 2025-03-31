@@ -1,4 +1,4 @@
-package utils
+package server
 
 import (
 	"calculator/calculator"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func DoDivide(w http.ResponseWriter, r *http.Request) {
+func DoSubtract(w http.ResponseWriter, r *http.Request) {
 	if errRequest := validateRequest(r); errRequest != nil {
 		writeJSON(w, http.StatusBadRequest, errRequest)
 		return
@@ -19,8 +19,8 @@ func DoDivide(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	slog.Info("Dividing", "number1", num1, "number2", num2)
-	result := calculator.Divide(num1, num2)
+	slog.Info("Subtracting", "number1", num1, "number2", num2)
+	result := calculator.Subtract(num1, num2)
 
 	writeJSON(w, http.StatusOK, result)
 }

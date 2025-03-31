@@ -1,4 +1,4 @@
-package utils
+package server
 
 import (
 	"calculator/calculator"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func DoMultiply(w http.ResponseWriter, r *http.Request) {
+func DoAdd(w http.ResponseWriter, r *http.Request) {
 	if errRequest := validateRequest(r); errRequest != nil {
 		writeJSON(w, http.StatusBadRequest, errRequest)
 		return
@@ -19,8 +19,8 @@ func DoMultiply(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	slog.Info("Multiplying", "number1", num1, "number2", num2)
-	result := calculator.Multiply(num1, num2)
+	slog.Info("Adding", "number1", num1, "number2", num2)
+	result := calculator.Add(num1, num2)
 
 	writeJSON(w, http.StatusOK, result)
 }
