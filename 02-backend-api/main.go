@@ -2,7 +2,7 @@ package main
 
 import (
 	"calculator/utils"
-	"log"
+	"log/slog"
 	"net/http"
 )
 
@@ -11,8 +11,9 @@ func main() {
 	http.HandleFunc("/subtract", utils.DoSubtract)
 	http.HandleFunc("/multiply", utils.DoMultiply)
 	http.HandleFunc("/divide", utils.DoDivide)
+	http.HandleFunc("/sum", utils.DoSum)
 
 	port := ":1337"
-	log.Println("Server is running on http://localhost" + port)
-	log.Fatal(http.ListenAndServe(port, nil))
+	slog.Info("Server is running on http://localhost" + port)
+	http.ListenAndServe(port, nil)
 }

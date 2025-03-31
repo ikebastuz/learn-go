@@ -1,30 +1,29 @@
 package utils
 
 import (
+	"log/slog"
 	"net/http"
 )
 
-func DoDivide(w http.ResponseWriter, r *http.Request) {
+func DoSum(w http.ResponseWriter, r *http.Request) {
 	if errRequest := validateRequest(r); errRequest != nil {
 		writeJSON(w, http.StatusBadRequest, errRequest)
 		return
 	}
 
-	var num1, num2, errPayload = validateRequest2Nums(r)
+	var items, errPayload = validateRequestNumsSlice(r)
 
 	if errPayload != nil {
 		writeJSON(w, http.StatusBadRequest, errPayload)
 		return
 	}
 
-	if num2 == 0 {
-		writeJSON(w, http.StatusBadRequest, &ResponseData{
-			Error: "Can not divide by 0",
-		})
+	slog.Info("Adding", "items", items)
 
-		return
+	var result float64 = 0
+	for _, num := range items {
+		result += num
 	}
 
-	result := num1 / num2
 	writeJSON(w, http.StatusOK, &ResponseData{Result: result})
 }

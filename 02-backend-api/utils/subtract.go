@@ -10,7 +10,7 @@ func DoSubtract(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var num1, num2, errPayload = validateRequest2Nums(&w, r)
+	var num1, num2, errPayload = validateRequest2Nums(r)
 
 	if errPayload != nil {
 		writeJSON(w, http.StatusBadRequest, errPayload)
@@ -18,5 +18,5 @@ func DoSubtract(w http.ResponseWriter, r *http.Request) {
 	}
 
 	result := num1 - num2
-	writeJSON(w, http.StatusOK, ResponseData{Result: result})
+	writeJSON(w, http.StatusOK, &ResponseData{Result: result})
 }
